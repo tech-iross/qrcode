@@ -16,3 +16,26 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+// CRUD Colaboradores
+Route::resource('colaboradores', \App\Http\Controllers\ColaboradorController::class)->except(['show']);
+
+// CRUD Produtos
+Route::resource('produtos', \App\Http\Controllers\ProdutoController::class)->except(['show']);
+
+// Listagem de setups
+Route::get('setups', [\App\Http\Controllers\SetupController::class, 'index'])->name('setups.index');
+
+// Fluxo de leitura e etapas
+Route::prefix('flow')->name('flow.')->group(function () {
+    Route::get('/', [\App\Http\Controllers\SetupFlowController::class, 'index'])->name('index');
+    Route::post('/reset', [\App\Http\Controllers\SetupFlowController::class, 'reset'])->name('reset');
+
+    Route::get('/scan-colaborador', [\App\Http\Controllers\SetupFlowController::class, 'scanColaborador'])->name('scan.colaborador');
+    Route::post('/process-colaborador', [\App\Http\Controllers\SetupFlowController::class, 'processColaborador'])->name('process.colaborador');
+
+    Route::get('/scan-produto', [\App\Http\Controllers\SetupFlowController::class, 'scanProduto'])->name('scan.produto');
+    Route::post('/process-produto', [\App\Http\Controllers\SetupFlowController::class, 'processProduto'])->name('process.produto');
+
+    Route::post('/concluir', [\App\Http\Controllers\SetupFlowController::class, 'concluir'])->name('concluir');
+});
