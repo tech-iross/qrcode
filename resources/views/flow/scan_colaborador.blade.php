@@ -17,16 +17,45 @@
 @push('scripts')
 <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
 <script>
+    let html5QrCode = null;
+    let isScanning = false;
+
     function onScanSuccess(decodedText) {
         document.getElementById('codigo_colaborador').value = decodedText;
-        document.getElementById('manualForm').submit();
-    }
-    function onScanError(error) { /* silencioso */ }
-    const html5QrCode = new Html5Qrcode("qr-reader");
-    Html5Qrcode.getCameras().then(devices => {
-        if (devices && devices.length) {
-            html5QrCode.start(devices[0].id, { fps:10, qrbox:250 }, onScanSuccess, onScanError);
+        if (html5QrCode && isScanning) {
+            html5QrCode.stop().then(() => {
+                isScanning = false;
+                document.getElementById('manualForm').submit();
+            }).catch(err => {
+                console.error(err);
+                document.getElementById('manualForm').submit();
+            });
+        } else {
+            document.getElementById('manualForm').submit();
         }
-    }).catch(err => console.error(err));
+    }
+
+    function onScanError(error) {  }
+
+    function startScanner() {
+        if (isScanning) return;
+
+        html5QrCode = new Html5Qrcode("qr-reader");
+        Html5Qrcode.getCameras().then(devices => {
+            if (devices && devices.length) {
+                html5QrCode.start(devices[0].id, { fps:10, qrbox:250 }, onScanSuccess, onScanError)
+                    .then(() => { isScanning = true; })
+                    .catch(err => console.error(err));
+            }
+        }).catch(err => console.error(err));
+    }
+
+    startScanner();
+
+    window.addEventListener('beforeunload', () => {
+        if (html5QrCode && isScanning) {
+            html5QrCode.stop().catch(err => console.error(err));
+        }
+    });
 </script>
 @endpush
