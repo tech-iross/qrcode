@@ -33,6 +33,13 @@
     function startScanner() {
         if (isScanning) return;
 
+        const container = document.getElementById("qr-reader");
+        container.innerHTML = "";
+
+        if (html5QrCode) {
+            try { html5QrCode.clear(); } catch(e) {}
+        }
+
         html5QrCode = new Html5Qrcode("qr-reader");
         Html5Qrcode.getCameras().then(devices => {
             if (devices && devices.length) {
