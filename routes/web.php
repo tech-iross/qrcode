@@ -22,6 +22,10 @@ Route::resource('colaboradores', \App\Http\Controllers\ColaboradorController::cl
 
 // CRUD Produtos
 Route::resource('produtos', \App\Http\Controllers\ProdutoController::class)->except(['show']);
+Route::get('/produtos/{produto}/qrcode', function($produto){
+    $produto = \App\Models\Produto::findOrFail($produto);
+    return view('produtos.qrcode', compact('produto'));
+})->name('produtos.qrcode');
 
 // Listagem de setups
 Route::get('setups', [\App\Http\Controllers\SetupController::class, 'index'])->name('setups.index');

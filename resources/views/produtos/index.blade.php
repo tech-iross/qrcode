@@ -6,12 +6,13 @@
     <a href="{{ route('produtos.create') }}" class="btn btn-primary btn-sm">Novo</a>
 </div>
 <table class="table table-sm table-striped">
-    <thead><tr><th>ID</th><th>Código</th><th>Sequencial</th><th>Posto</th><th>Linha</th><th>Setor</th><th>Torque Padrão</th><th>Ações</th></tr></thead>
+    <thead><tr><th>ID</th><th>Código</th><th>QRCode</th><th>Sequencial</th><th>Posto</th><th>Linha</th><th>Setor</th><th>Torque Padrão</th><th>Ações</th></tr></thead>
     <tbody>
         @foreach($produtos as $p)
         <tr>
             <td>{{ $p->id }}</td>
             <td>{{ $p->codigo }}</td>
+            <a href="{{ route('produtos.qrcode',$p) }}" class="btn btn-sm btn-outline-primary">QR</a>
             <td>{{ $p->numero_sequencial }}</td>
             <td>{{ $p->posto }}</td>
             <td>{{ $p->linha }}</td>
