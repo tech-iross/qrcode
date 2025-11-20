@@ -12,7 +12,9 @@
         <tr>
             <td>{{ $p->id }}</td>
             <td>{{ $p->codigo }}</td>
-            <a href="{{ route('produtos.qrcode',$p) }}" class="btn btn-sm btn-outline-primary">QR</a>
+            <td>
+                <a href="{{ route('produtos.qrcode',$p) }}" class="btn btn-sm btn-outline-primary">QR</a>
+            </td>
             <td>{{ $p->numero_sequencial }}</td>
             <td>{{ $p->posto }}</td>
             <td>{{ $p->linha }}</td>
