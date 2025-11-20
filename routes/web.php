@@ -19,6 +19,10 @@ Route::get('/', function () {
 
 // CRUD Colaboradores
 Route::resource('colaboradores', \App\Http\Controllers\ColaboradorController::class)->except(['show']);
+Route::get('/colaboradores/{colaborador}/qrcode', function($colaborador){
+    $colaborador = \App\Models\Colaborador::findOrFail($colaborador);
+    return view('colaboradores.qrcode', compact('colaborador'));
+})->name('colaboradores.qrcode');
 
 // CRUD Produtos
 Route::resource('produtos', \App\Http\Controllers\ProdutoController::class)->except(['show']);

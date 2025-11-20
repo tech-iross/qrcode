@@ -6,12 +6,15 @@
     <a href="{{ route('colaboradores.create') }}" class="btn btn-primary btn-sm">Novo</a>
 </div>
 <table class="table table-sm table-striped">
-    <thead><tr><th>ID</th><th>Matrícula</th><th>Nome</th><th>Função</th><th>Ações</th></tr></thead>
+    <thead><tr><th>ID</th><th>Matrícula</th><th>QRCode</th><th>Nome</th><th>Função</th><th>Ações</th></tr></thead>
     <tbody>
         @foreach($colaboradores as $c)
         <tr>
             <td>{{ $c->id }}</td>
             <td>{{ $c->matricula }}</td>
+            <td>
+                <a href="{{ route('colaboradores.qrcode',$c) }}" class="btn btn-sm btn-outline-primary">QR</a>
+            </td>
             <td>{{ $c->nome }}</td>
             <td>{{ $c->funcao }}</td>
             <td class="text-nowrap">
