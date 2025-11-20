@@ -6,6 +6,7 @@ services:
       context: .
       dockerfile: Dockerfile
     container_name: qrcode_app
+    restart: always
     volumes:
       - ./:/var/www
     networks:
@@ -32,6 +33,7 @@ services:
   nginx:
     image: nginx:latest
     container_name: qrcode_nginx
+    restart: always
     ports:
       - "8005:80"
     volumes:
