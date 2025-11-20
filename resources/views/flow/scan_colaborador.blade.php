@@ -22,47 +22,58 @@
 
     function onScanSuccess(decodedText) {
         document.getElementById('codigo_colaborador').value = decodedText;
-        if (html5QrCode && isScanning) {
-            html5QrCode.stop().then(() => {
-                isScanning = false;
-                document.getElementById('manualForm').submit();
-            }).catch(err => {
-                console.error(err);
-                document.getElementById('manualForm').submit();
-            });
-        } else {
+
+        stopScanner().then(() => {
             document.getElementById('manualForm').submit();
+        });
+    }
+
+    function onScanError(error) { }
+
+    async function stopScanner() {
+        if (html5QrCode && isScanning) {
+            try {
+                await html5QrCode.stop();
+            } catch (e) {
+                console.warn(e);
+            }
+
+            try {
+                await html5QrCode.clear();
+            } catch (e) {
+                console.warn(e);
+            }
+
+            isScanning = false;
         }
     }
 
-    function onScanError(error) {  }
-
-    function startScanner() {
-        if (isScanning) return;
+    async function startScanner() {
+        await stopScanner(); // garante que a câmera está livre
 
         const container = document.getElementById("qr-reader");
-        container.innerHTML = "";
-
-        if (html5QrCode) {
-            try { html5QrCode.clear(); } catch(e) {}
-        }
+        container.innerHTML = ""; // reseta div
 
         html5QrCode = new Html5Qrcode("qr-reader");
+
         Html5Qrcode.getCameras().then(devices => {
             if (devices && devices.length) {
-                html5QrCode.start(devices[0].id, { fps:10, qrbox:250 }, onScanSuccess, onScanError)
-                    .then(() => { isScanning = true; })
-                    .catch(err => console.error(err));
+                html5QrCode.start(
+                    devices[0].id,
+                    { fps: 10, qrbox: 250 },
+                    onScanSuccess,
+                    onScanError
+                )
+                .then(() => isScanning = true)
+                .catch(err => console.error(err));
             }
-        }).catch(err => console.error(err));
+        })
+        .catch(err => console.error(err));
     }
 
     startScanner();
 
-    window.addEventListener('beforeunload', () => {
-        if (html5QrCode && isScanning) {
-            html5QrCode.stop().catch(err => console.error(err));
-        }
-    });
+    window.addEventListener('beforeunload', stopScanner);
+
 </script>
 @endpush
