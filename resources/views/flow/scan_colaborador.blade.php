@@ -49,7 +49,7 @@
     }
 
     async function startScanner() {
-        await stopScanner(); // garante que a câmera está livre
+        await stopScanner();
 
         const container = document.getElementById("qr-reader");
         container.innerHTML = ""; // reseta div
