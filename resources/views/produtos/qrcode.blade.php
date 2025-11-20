@@ -1,5 +1,5 @@
 <h3>QR Code do Produto {{ $produto->codigo }}</h3>
 
 <div>
-    {!! QrCode::size(250)->generate($produto->codigo) !!}
+    {!! \SimpleSoftwareIO\QrCode\Facades\QrCode::size(90)->generate($p->codigo) !!}
 </div>
