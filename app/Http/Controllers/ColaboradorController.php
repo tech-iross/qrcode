@@ -50,4 +50,9 @@ class ColaboradorController extends Controller
         $colaborador->delete();
         return redirect()->route('colaboradores.index')->with('success', 'Colaborador removido.');
     }
+
+    public function qrcode(Colaborador $colaborador)
+    {
+        return view('colaboradores.qrcode', compact('colaborador'));
+    }
 }

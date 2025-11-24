@@ -10,5 +10,6 @@
 <div class="d-flex gap-2">
     <a href="{{ route('flow.index') }}" class="btn btn-secondary">Voltar</a>
     <a href="{{ route('flow.scan.produto') }}" class="btn btn-primary">Avançar para Etapa 2</a>
+    <a href="{{ route('colaboradores.qrcode', $colaborador->id) }}" class="btn btn-outline-secondary">Ver QR do Colaborador</a>
 </div>
 @endsection

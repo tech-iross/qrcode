@@ -2,13 +2,52 @@
 
 
 @extends('layouts.app')
-@section('title','QrCode - Colaborador')
+@section('title','QR Code Colaborador')
 @section('content')
-<h4>QrCode Colaborador</h4>
-    {{ $colaborador->matricula }}
-</h4>
-
-<div style="display: flex; justify-content: center; align-items: center; margin-top: 20px;">
-    {!! \SimpleSoftwareIO\QrCode\Facades\QrCode::size(250)->margin(2)->generate($colaborador->matricula) !!}
+<h4>QR Code do Colaborador</h4>
+<p><strong>Matrícula:</strong> {{ $colaborador->matricula }}</p>
+<p><strong>Nome:</strong> {{ $colaborador->nome }}</p>
+<div id="qrcode" class="p-3 bg-white border" style="width:260px"></div>
+<div class="mt-3 d-flex gap-2">
+    <a href="{{ route('colaboradores.index') }}" class="btn btn-secondary">Voltar</a>
+    <button class="btn btn-outline-primary" onclick="window.print()">Imprimir</button>
+    <button class="btn btn-outline-success" id="downloadBtn">Baixar PNG</button>
+    <button class="btn btn-outline-dark" id="openNew">Abrir em Página</button>
 </div>
 @endsection
+@push('scripts')
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js" integrity="sha512-TnX0r28mSsqGQBd4qVQwVFQh5b1xoy6wYJ0G07Z0rZQ6f6DRvDq0WpIW9S8S7GkJX0rK9QZi3pC1K7lbndNrxw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script>
+    const code = "{{ $colaborador->matricula }}";
+    const qrcodeDiv = document.getElementById('qrcode');
+    const qr = new QRCode(qrcodeDiv, {
+        text: code,
+        width: 250,
+        height: 250,
+        correctLevel: QRCode.CorrectLevel.H
+    });
+
+    function dataUrlFromCanvas() {
+        const img = qrcodeDiv.querySelector('img');
+        if (img) return img.src;
+        const canvas = qrcodeDiv.querySelector('canvas');
+        return canvas ? canvas.toDataURL('image/png') : null;
+    }
+
+    document.getElementById('downloadBtn').addEventListener('click', () => {
+        const url = dataUrlFromCanvas();
+        if (!url) return;
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'colaborador-' + code + '.png';
+        a.click();
+    });
+
+    document.getElementById('openNew').addEventListener('click', () => {
+        const url = dataUrlFromCanvas();
+        if (!url) return;
+        const w = window.open('', '_blank');
+        w.document.write('<title>QR Colaborador '+code+'</title><img style="width:100%;max-width:500px" src="'+url+'" /><p>'+code+'</p>');
+    });
+</script>
+@endpush
