@@ -30,6 +30,13 @@
 
     function onScanError(error) { }
 
+    function pickBackCamera(devices) {
+        // tenta encontrar camera traseira / environment
+        const regex = /(back|rear|environment|traseira)/i;
+        const found = devices.find(d => regex.test(d.label));
+        return found || devices[0];
+    }
+
     function startScanner() {
         if (isScanning) return;
 
@@ -43,7 +50,8 @@
         html5QrCode = new Html5Qrcode("qr-reader");
         Html5Qrcode.getCameras().then(devices => {
             if (devices && devices.length) {
-                html5QrCode.start(devices[0].id, { fps:10, qrbox:250 }, onScanSuccess, onScanError)
+                const cam = pickBackCamera(devices);
+                html5QrCode.start(cam.id, { fps:10, qrbox:250 }, onScanSuccess, onScanError)
                     .then(() => { isScanning = true; })
                     .catch(err => console.error(err));
             }

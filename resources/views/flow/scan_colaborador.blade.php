@@ -48,6 +48,12 @@
         }
     }
 
+    function pickBackCamera(devices) {
+        const regex = /(back|rear|environment|traseira)/i;
+        const found = devices.find(d => regex.test(d.label));
+        return found || devices[0];
+    }
+
     async function startScanner() {
         await stopScanner();
 
@@ -58,8 +64,9 @@
 
         Html5Qrcode.getCameras().then(devices => {
             if (devices && devices.length) {
+                const cam = pickBackCamera(devices);
                 html5QrCode.start(
-                    devices[0].id,
+                    cam.id,
                     { fps: 10, qrbox: 250 },
                     onScanSuccess,
                     onScanError

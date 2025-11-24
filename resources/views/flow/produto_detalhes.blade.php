@@ -13,5 +13,6 @@
 </ul>
 <div class="d-flex gap-2">
     <a href="{{ route('flow.index') }}" class="btn btn-primary">Voltar ao Fluxo</a>
+    <a href="{{ route('produtos.qrcode', $produto->id) }}" class="btn btn-outline-secondary">Ver QR do Produto</a>
 </div>
 @endsection

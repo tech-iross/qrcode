@@ -28,10 +28,7 @@ Route::get('/colaboradores/{colaborador}/qrcode', function($colaborador){
 
 // CRUD Produtos
 Route::resource('produtos', \App\Http\Controllers\ProdutoController::class)->except(['show']);
-Route::get('/produtos/{produto}/qrcode', function($produto){
-    $produto = \App\Models\Produto::findOrFail($produto);
-    return view('produtos.qrcode', compact('produto'));
-})->name('produtos.qrcode');
+Route::get('/produtos/{produto}/qrcode', [\App\Http\Controllers\ProdutoController::class, 'qrcode'])->name('produtos.qrcode');
 
 // Listagem de setups
 Route::get('setups', [\App\Http\Controllers\SetupController::class, 'index'])->name('setups.index');

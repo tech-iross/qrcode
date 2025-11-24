@@ -56,4 +56,9 @@ class ProdutoController extends Controller
         $produto->delete();
         return redirect()->route('produtos.index')->with('success', 'Produto removido.');
     }
+
+    public function qrcode(Produto $produto)
+    {
+        return view('produtos.qrcode', compact('produto'));
+    }
 }
