@@ -37,6 +37,10 @@
           <button class="btn btn-outline-light btn-sm">Sair</button>
         </form>
       </div>
+      @else
+      <div class="d-flex">
+        <a href="{{ route('login') }}" class="btn btn-outline-light btn-sm">Login</a>
+      </div>
       @endauth
     </div>
   </div>
