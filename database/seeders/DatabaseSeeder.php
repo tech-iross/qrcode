@@ -6,6 +6,8 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use App\Models\Colaborador;
 use App\Models\Produto;
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
@@ -14,6 +16,12 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        // Seed usuário admin
+        User::query()->updateOrCreate(
+            ['email' => 'admin@admin.com'],
+            ['name' => 'Administrador', 'password' => Hash::make('admin123')]
+        );
+
         // Seeds de colaboradores
         Colaborador::query()->upsert([
             ['matricula' => 'C001', 'nome' => 'João Silva', 'funcao' => 'Auxiliar de Produção'],
