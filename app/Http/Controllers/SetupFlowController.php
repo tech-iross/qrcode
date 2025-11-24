@@ -106,7 +106,7 @@ class SetupFlowController extends Controller
             'finished_at' => now(),
         ]);
         Session::forget('current_setup_id');
-        return redirect()->route('setups.index')->with('success', 'Setup concluído.');
+        return redirect()->route('flow.index')->with('success', 'Setup concluído.');
     }
 
     protected function currentSetup(): ?Setup
