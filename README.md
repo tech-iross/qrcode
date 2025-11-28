@@ -86,7 +86,7 @@ docker compose exec app chmod -R 777 storage bootstrap/cache
 
 | Serviço | Container | Porta | Acesso |
 |---------|-----------|-------|--------|
-| **Aplicação Web** | qrcode_nginx | 8000 | http://localhost:8000 |
+| **Aplicação Web** | qrcode_nginx | 8443 | http://localhost:8443 |
 | **MySQL** | qrcode_mysql | 3306 | localhost:3306 |
 | **PHP-FPM** | qrcode_app | - | Interno |
 
@@ -101,9 +101,9 @@ Após executar as seeds, use as seguintes credenciais para login:
 
 ### URLs Principais
 
-- **Fluxo QR (Público):** http://localhost:8000/flow
-- **Login:** http://localhost:8000/login
-- **Dashboard:** http://localhost:8000/colaboradores (após login)
+- **Fluxo QR (Público):** http://localhost:8443/flow
+- **Login:** http://localhost:8443/login
+- **Dashboard:** http://localhost:8443/colaboradores (após login)
 
 ## 📱 Funcionalidades
 
