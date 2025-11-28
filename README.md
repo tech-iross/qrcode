@@ -1,66 +1,190 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# QR Code Setup System
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Sistema de gerenciamento de setups com leitura de QR Code para parafusadeiras, desenvolvido em Laravel com Docker.
 
-## About Laravel
+## 📋 Sobre o Projeto
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Sistema para controle de setups de parafusadeiras em ambiente industrial, permitindo:
+- Leitura de QR codes de colaboradores e equipamentos (parafusadeiras)
+- Registro de torque informado durante o processo
+- Fluxo em etapas para validação de setup
+- Geração de QR codes para colaboradores e produtos
+- Autenticação de usuários com controle de acesso
+- CRUDs completos para gerenciamento
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## 🚀 Tecnologias
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- **Laravel 10** - Framework PHP
+- **MySQL 8.0** - Banco de dados
+- **Nginx** - Servidor web
+- **Docker & Docker Compose** - Containerização
+- **Bootstrap 5** - Interface responsiva
+- **SimpleSoftwareIO QR Code** - Geração de QR codes
 
-## Learning Laravel
+## 📦 Requisitos
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+- Docker
+- Docker Compose
+- Git
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+## 🔧 Instalação
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### 1. Entre no repositório
 
-## Laravel Sponsors
+```bash
+cd qrcode
+```
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+### 2. Configure o arquivo .env
 
-### Premium Partners
+```bash
+cp .env.example .env
+```
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
+Verifique as configurações do banco de dados no `.env`:
 
-## Contributing
+```env
+DB_CONNECTION=mysql
+DB_HOST=mysql
+DB_PORT=3306
+DB_DATABASE=qrcode
+DB_USERNAME=qrcode
+DB_PASSWORD=qrcode
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### 3. Build e start dos containers Docker
 
-## Code of Conduct
+```bash
+docker compose up -d --build
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### 4. Instale as dependências do Composer
 
-## Security Vulnerabilities
+```bash
+docker compose exec app composer install
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### 5. Gere a chave da aplicação
 
-## License
+```bash
+docker compose exec app php artisan key:generate
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+### 6. Execute as migrations e seeds
+
+```bash
+docker compose exec app php artisan migrate:fresh --seed
+```
+
+### 7. Ajuste permissões (se necessário)
+
+```bash
+docker compose exec app chmod -R 777 storage bootstrap/cache
+```
+
+## 🌐 Serviços e Portas
+
+| Serviço | Container | Porta | Acesso |
+|---------|-----------|-------|--------|
+| **Aplicação Web** | qrcode_nginx | 8000 | http://localhost:8000 |
+| **MySQL** | qrcode_mysql | 3306 | localhost:3306 |
+| **PHP-FPM** | qrcode_app | - | Interno |
+
+## 🔑 Acesso ao Sistema
+
+### Credenciais Padrão
+
+Após executar as seeds, use as seguintes credenciais para login:
+
+- **Email:** admin@admin.com
+- **Senha:** admin123
+
+### URLs Principais
+
+- **Fluxo QR (Público):** http://localhost:8000/flow
+- **Login:** http://localhost:8000/login
+- **Dashboard:** http://localhost:8000/colaboradores (após login)
+
+## 📱 Funcionalidades
+
+### Área Pública
+- **Fluxo de Setup:** Leitura de QR codes em duas etapas (colaborador e parafusadeira)
+
+### Área Administrativa (requer login)
+- **Colaboradores:** CRUD completo + geração de QR code
+- **Produtos:** CRUD completo + geração de QR code (parafusadeiras)
+- **Setups:** Listagem de registros de setups realizados
+- **Usuários:** Gerenciamento de usuários do sistema
+
+## 🔄 Fluxo de Leitura QR
+
+1. **Etapa 1:** Ler QR code do colaborador (matrícula)
+   - Exibe: matrícula, nome, função
+   - Botão para avançar
+
+2. **Etapa 2:** Ler QR code da parafusadeira
+   - Exibe: código, número sequencial, posto, linha, setor, torque padrão
+   - **Campo obrigatório:** Informar torque medido
+   - Botão para confirmar
+
+3. **Conclusão:** Registra setup com timestamps e dados completos
+
+## 🗄️ Banco de Dados
+
+### Dados de Exemplo (Seeds)
+
+**Colaboradores:**
+- C001 - João Silva (Auxiliar de Produção)
+- C002 - Maria Oliveira (Operador de Linha)
+- C003 - Pedro Santos (Técnico de Manutenção)
+
+**Parafusadeiras:**
+- PFD-001 a PFD-005 (Diversos postos e linhas)
+
+## 🛠️ Comandos Úteis
+
+### Acessar container da aplicação
+```bash
+docker compose exec app bash
+```
+
+### Acessar MySQL
+```bash
+docker compose exec mysql mysql -u qrcode -pqrcode qrcode
+```
+
+### Logs em tempo real
+```bash
+docker compose logs -f app
+```
+
+### Parar containers
+```bash
+docker compose down
+```
+
+### Resetar banco de dados
+```bash
+docker compose exec app php artisan migrate:fresh --seed
+```
+
+### Executar apenas seeds
+```bash
+docker compose exec app php artisan db:seed
+```
+
+## 📸 Geração de QR Codes
+
+O sistema utiliza a biblioteca `simplesoftwareio/simple-qrcode` para geração server-side de QR codes em formato SVG, garantindo:
+- Alta qualidade
+- Escalabilidade
+- Funcionamento offline
+- Pronto para impressão
+
+## 🔒 Segurança
+
+- Rotas administrativas protegidas por middleware `auth`
+- Senhas criptografadas com bcrypt
+- Validação de dados em todas as requisições
+- Proteção CSRF em formulários
+
