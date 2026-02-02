@@ -1,5 +1,4 @@
-# Troque fpm por apache (já vem com servidor web pronto)
-FROM php:8.2-apache 
+FROM php:8.2-fpm
 
 RUN apt-get update && apt-get install -y \
     curl \
@@ -15,22 +14,13 @@ RUN apt-get update && apt-get install -y \
     && docker-php-ext-configure gd --with-jpeg --with-freetype \
     && docker-php-ext-install pdo pdo_mysql zip gd
 
-# Habilitar o mod_rewrite do Apache (essencial para rotas do Laravel)
-RUN a2enmod rewrite
-
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# No Apache, o diretório padrão é /var/www/html
-WORKDIR /var/www/html
+WORKDIR /var/www
 
 COPY . .
 
-# Ajuste para apontar o Apache para a pasta /public do Laravel
-RUN sed -i 's|/var/www/html|/var/www/html/public|g' /etc/apache2/sites-available/000-default.conf
+RUN composer install
 
-RUN composer install --no-dev --optimize-autoloader
-
-RUN chown -R www-data:www-data /var/www/html \
+RUN chown -R www-data:www-data /var/www \
     && chmod -R 775 storage bootstrap/cache
-
-EXPOSE 80

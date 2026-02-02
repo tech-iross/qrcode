@@ -15,7 +15,8 @@ class ProdutoController extends Controller
 
     public function create()
     {
-        return view('produtos.create');
+        $categorias = \App\Models\CategoriaProduto::all();
+        return view('produtos.create', compact('categorias'));
     }
 
     public function store(Request $request)
@@ -27,6 +28,7 @@ class ProdutoController extends Controller
             'linha' => 'required|string',
             'setor' => 'required|string',
             'torque_padrao' => 'nullable|numeric',
+            'categoria_id' => 'nullable|exists:categorias_produtos,id',
         ]);
         Produto::create($data);
         return redirect()->route('produtos.index')->with('success', 'Produto criado.');
@@ -34,7 +36,8 @@ class ProdutoController extends Controller
 
     public function edit(Produto $produto)
     {
-        return view('produtos.edit', compact('produto'));
+        $categorias = \App\Models\CategoriaProduto::all();
+        return view('produtos.edit', compact('produto', 'categorias'));
     }
 
     public function update(Request $request, Produto $produto)
@@ -46,6 +49,7 @@ class ProdutoController extends Controller
             'linha' => 'required|string',
             'setor' => 'required|string',
             'torque_padrao' => 'nullable|numeric',
+            'categoria_id' => 'nullable|exists:categorias_produtos,id',
         ]);
         $produto->update($data);
         return redirect()->route('produtos.index')->with('success', 'Produto atualizado.');

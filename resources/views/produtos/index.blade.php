@@ -21,6 +21,7 @@
             <td>{{ $p->setor }}</td>
             <td>{{ $p->torque_padrao }}</td>
             <td class="text-nowrap">
+                <a href="{{ route('admin.perguntas.index',$p) }}" class="btn btn-sm btn-outline-info">Perguntas</a>
                 <a href="{{ route('produtos.edit',$p) }}" class="btn btn-sm btn-outline-secondary">Editar</a>
                 <form action="{{ route('produtos.destroy',$p) }}" method="POST" class="d-inline" onsubmit="return confirm('Remover?');">
                     @csrf @method('DELETE')

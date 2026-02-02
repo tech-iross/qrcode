@@ -1,5 +1,14 @@
 @csrf
 <div class="mb-3">
+    <label class="form-label">Categoria</label>
+    <select name="categoria_id" class="form-select">
+        <option value="">Sem Categoria</option>
+        @foreach($categorias as $cat)
+            <option value="{{ $cat->id }}" {{ (isset($produto) && $produto->categoria_id == $cat->id) ? 'selected' : '' }}>{{ $cat->nome }}</option>
+        @endforeach
+    </select>
+</div>
+<div class="mb-3">
     <label class="form-label">Código (QR)</label>
     <input type="text" name="codigo" value="{{ old('codigo', $produto->codigo ?? '') }}" class="form-control" required>
 </div>
