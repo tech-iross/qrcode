@@ -8,7 +8,6 @@
     <li class="list-group-item"><strong>Posto:</strong> {{ $produto->posto }}</li>
     <li class="list-group-item"><strong>Linha:</strong> {{ $produto->linha }}</li>
     <li class="list-group-item"><strong>Setor:</strong> {{ $produto->setor }}</li>
-    <li class="list-group-item"><strong>Torque Padrão:</strong> {{ $produto->torque_padrao ?? '---' }}</li>
 </ul>
 <div class="d-flex gap-2">
     <a href="{{ route('flow.index') }}" class="btn btn-secondary">Voltar ao Painel</a>

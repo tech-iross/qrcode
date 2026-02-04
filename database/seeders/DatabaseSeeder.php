@@ -22,6 +22,23 @@ class DatabaseSeeder extends Seeder
             ['name' => 'Administrador', 'password' => Hash::make('admin123')]
         );
 
+        // Seeds de categorias
+        $catParaf = \App\Models\CategoriaProduto::query()->updateOrCreate(['nome' => 'Parafusadeiras Manual']);
+        $catAuto = \App\Models\CategoriaProduto::query()->updateOrCreate(['nome' => 'Parafusadeiras Automáticas']);
+
+        // Seeds de perguntas para Parafusadeiras Manual
+        $pergunta1 = $catParaf->perguntas()->updateOrCreate(
+            ['texto' => 'A ferramenta apresenta ruídos anormais?'],
+            ['tipo' => 'multipla_escolha']
+        );
+        $pergunta1->opcoes()->updateOrCreate(['texto' => 'Sim']);
+        $pergunta1->opcoes()->updateOrCreate(['texto' => 'Não']);
+
+        $catParaf->perguntas()->updateOrCreate(
+            ['texto' => 'Descreva o estado físico da ferramenta.'],
+            ['tipo' => 'texto']
+        );
+
         // Seeds de colaboradores
         Colaborador::query()->upsert([
             ['matricula' => 'C001', 'nome' => 'João Silva', 'funcao' => 'Auxiliar de Produção'],
@@ -31,11 +48,11 @@ class DatabaseSeeder extends Seeder
 
         // Seeds de parafusadeiras (produtos)
         Produto::query()->upsert([
-            ['codigo' => 'PFD-001','numero_sequencial' => '001','posto' => 'Posto A','linha' => 'Linha 1','setor' => 'Montagem','torque_padrao' => 12.50],
-            ['codigo' => 'PFD-002','numero_sequencial' => '002','posto' => 'Posto B','linha' => 'Linha 1','setor' => 'Montagem','torque_padrao' => 11.80],
-            ['codigo' => 'PFD-003','numero_sequencial' => '003','posto' => 'Posto C','linha' => 'Linha 2','setor' => 'Montagem','torque_padrao' => 13.00],
-            ['codigo' => 'PFD-004','numero_sequencial' => '004','posto' => 'Posto D','linha' => 'Linha 2','setor' => 'Qualidade','torque_padrao' => 10.75],
-            ['codigo' => 'PFD-005','numero_sequencial' => '005','posto' => 'Posto E','linha' => 'Linha 3','setor' => 'Montagem','torque_padrao' => 12.00],
-        ], ['codigo'], ['numero_sequencial','posto','linha','setor','torque_padrao']);
+            ['codigo' => 'PFD-001','numero_sequencial' => '001','posto' => 'Posto A','linha' => 'Linha 1','setor' => 'Montagem', 'categoria_id' => $catParaf->id],
+            ['codigo' => 'PFD-002','numero_sequencial' => '002','posto' => 'Posto B','linha' => 'Linha 1','setor' => 'Montagem', 'categoria_id' => $catParaf->id],
+            ['codigo' => 'PFD-003','numero_sequencial' => '003','posto' => 'Posto C','linha' => 'Linha 2','setor' => 'Montagem', 'categoria_id' => $catAuto->id],
+            ['codigo' => 'PFD-004','numero_sequencial' => '004','posto' => 'Posto D','linha' => 'Linha 2','setor' => 'Qualidade', 'categoria_id' => $catParaf->id],
+            ['codigo' => 'PFD-005','numero_sequencial' => '005','posto' => 'Posto E','linha' => 'Linha 3','setor' => 'Montagem', 'categoria_id' => $catAuto->id],
+        ], ['codigo'], ['numero_sequencial','posto','linha','setor', 'categoria_id']);
     }
 }

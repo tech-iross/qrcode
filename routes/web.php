@@ -53,10 +53,12 @@ Route::middleware('auth')->group(function () {
     Route::resource('produtos', \App\Http\Controllers\ProdutoController::class)->except(['show']);
     Route::get('/produtos/{produto}/qrcode', [\App\Http\Controllers\ProdutoController::class, 'qrcode'])->name('produtos.qrcode');
 
-    // CRUD Perguntas (associadas a produto)
-    Route::get('/produtos/{produto}/perguntas', [\App\Http\Controllers\Admin\PerguntaController::class, 'index'])->name('admin.perguntas.index');
-    Route::get('/produtos/{produto}/perguntas/create', [\App\Http\Controllers\Admin\PerguntaController::class, 'create'])->name('admin.perguntas.create');
-    Route::post('/produtos/{produto}/perguntas', [\App\Http\Controllers\Admin\PerguntaController::class, 'store'])->name('admin.perguntas.store');
+    // CRUD Perguntas (associadas a categoria)
+    Route::get('/categorias/{categoria}/perguntas', [\App\Http\Controllers\Admin\PerguntaController::class, 'index'])->name('admin.perguntas.index');
+    Route::get('/categorias/{categoria}/perguntas/create', [\App\Http\Controllers\Admin\PerguntaController::class, 'create'])->name('admin.perguntas.create');
+    Route::post('/categorias/{categoria}/perguntas', [\App\Http\Controllers\Admin\PerguntaController::class, 'store'])->name('admin.perguntas.store');
+    Route::get('/perguntas/{pergunta}/edit', [\App\Http\Controllers\Admin\PerguntaController::class, 'edit'])->name('admin.perguntas.edit');
+    Route::put('/perguntas/{pergunta}', [\App\Http\Controllers\Admin\PerguntaController::class, 'update'])->name('admin.perguntas.update');
     Route::delete('/perguntas/{pergunta}', [\App\Http\Controllers\Admin\PerguntaController::class, 'destroy'])->name('admin.perguntas.destroy');
 
     // Relatórios de CheckPoints

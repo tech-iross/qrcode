@@ -6,7 +6,7 @@
     <a href="{{ route('produtos.create') }}" class="btn btn-primary btn-sm">Novo</a>
 </div>
 <table class="table table-sm table-striped">
-    <thead><tr><th>ID</th><th>Código</th><th>QRCode</th><th>Sequencial</th><th>Posto</th><th>Linha</th><th>Setor</th><th>Torque Padrão</th><th>Ações</th></tr></thead>
+    <thead><tr><th>ID</th><th>Código</th><th>QRCode</th><th>Sequencial</th><th>Posto</th><th>Linha</th><th>Setor</th><th>Ações</th></tr></thead>
     <tbody>
         @foreach($produtos as $p)
         <tr>
@@ -19,9 +19,7 @@
             <td>{{ $p->posto }}</td>
             <td>{{ $p->linha }}</td>
             <td>{{ $p->setor }}</td>
-            <td>{{ $p->torque_padrao }}</td>
             <td class="text-nowrap">
-                <a href="{{ route('admin.perguntas.index',$p) }}" class="btn btn-sm btn-outline-info">Perguntas</a>
                 <a href="{{ route('produtos.edit',$p) }}" class="btn btn-sm btn-outline-secondary">Editar</a>
                 <form action="{{ route('produtos.destroy',$p) }}" method="POST" class="d-inline" onsubmit="return confirm('Remover?');">
                     @csrf @method('DELETE')

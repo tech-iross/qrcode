@@ -1,48 +1,47 @@
 @extends('layouts.app')
 
 @section('content')
-<h1>Nova Pergunta para: {{ $categoria->nome }}</h1>
+<h1>Editar Pergunta para: {{ $categoria->nome }}</h1>
 <div class="card shadow-sm col-md-8">
     <div class="card-body">
-        <form action="{{ route('admin.perguntas.store', $categoria) }}" method="POST">
+        <form action="{{ route('admin.perguntas.update', $pergunta) }}" method="POST">
             @csrf
+            @method('PUT')
             <div class="mb-3">
                 <label class="form-label">Texto da Pergunta</label>
-                <input type="text" name="texto" class="form-control" value="{{ old('texto') }}" required>
+                <input type="text" name="texto" class="form-control" value="{{ old('texto', $pergunta->texto) }}" required>
             </div>
             <div class="mb-3">
                 <label class="form-label">Tipo</label>
                 <select name="tipo" class="form-select" id="tipoSelect">
-                    <option value="texto" {{ old('tipo') == 'texto' ? 'selected' : '' }}>Texto</option>
-                    <option value="multipla_escolha" {{ old('tipo') == 'multipla_escolha' ? 'selected' : '' }}>Múltipla Escolha</option>
+                    <option value="texto" {{ old('tipo', $pergunta->tipo) == 'texto' ? 'selected' : '' }}>Texto</option>
+                    <option value="multipla_escolha" {{ old('tipo', $pergunta->tipo) == 'multipla_escolha' ? 'selected' : '' }}>Múltipla Escolha</option>
                 </select>
             </div>
             
-            <div id="opcoesContainer" style="{{ old('tipo') === 'multipla_escolha' ? '' : 'display:none;' }}">
+            <div id="opcoesContainer" style="{{ old('tipo', $pergunta->tipo) === 'multipla_escolha' ? '' : 'display:none;' }}">
                 <label class="form-label d-flex justify-content-between align-items-center">
                     Opções da Pergunta
                     <button type="button" class="btn btn-sm btn-outline-success" onclick="addOption()">+ Adicionar Opção</button>
                 </label>
                 <div id="optionsList" class="mt-2">
-                    @if(old('opcoes'))
-                        @foreach(old('opcoes') as $index => $opcao)
-                            <div class="input-group mb-2 option-item">
-                                <input type="text" name="opcoes[]" class="form-control" placeholder="Digite a opção..." value="{{ $opcao }}" {{ old('tipo') !== 'multipla_escolha' ? 'disabled' : '' }}>
-                                <button type="button" class="btn btn-outline-danger" onclick="removeOption(this)">Remover</button>
-                            </div>
-                        @endforeach
-                    @else
+                    @forelse(old('opcoes', $pergunta->opcoes->pluck('texto')->toArray()) as $opcao)
                         <div class="input-group mb-2 option-item">
-                            <input type="text" name="opcoes[]" class="form-control" placeholder="Digite a opção..." {{ old('tipo') !== 'multipla_escolha' ? 'disabled' : '' }}>
+                            <input type="text" name="opcoes[]" class="form-control" placeholder="Digite a opção..." value="{{ $opcao }}" {{ old('tipo', $pergunta->tipo) !== 'multipla_escolha' ? 'disabled' : '' }}>
                             <button type="button" class="btn btn-outline-danger" onclick="removeOption(this)">Remover</button>
                         </div>
-                    @endif
+                    @empty
+                        <div class="input-group mb-2 option-item">
+                            <input type="text" name="opcoes[]" class="form-control" placeholder="Digite a opção..." {{ old('tipo', $pergunta->tipo) !== 'multipla_escolha' ? 'disabled' : '' }}>
+                            <button type="button" class="btn btn-outline-danger" onclick="removeOption(this)">Remover</button>
+                        </div>
+                    @endforelse
                 </div>
                 <small class="text-muted">Adicione pelo menos uma opção para perguntas de múltipla escolha.</small>
             </div>
 
             <div class="mt-4">
-                <button class="btn btn-primary">Salvar Pergunta</button>
+                <button class="btn btn-primary">Atualizar Pergunta</button>
                 <a href="{{ route('admin.perguntas.index', $categoria) }}" class="btn btn-link">Cancelar</a>
             </div>
         </form>
@@ -58,7 +57,6 @@
         const isMulti = this.value === 'multipla_escolha';
         container.style.display = isMulti ? 'block' : 'none';
         
-        // Ativar/Desativar inputs para que não sejam enviados se não for múltipla escolha
         const inputs = container.querySelectorAll('input');
         inputs.forEach(input => {
             input.disabled = !isMulti;

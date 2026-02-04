@@ -23,11 +23,11 @@
     <div class="collapse navbar-collapse" id="navbarsExample">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         @auth
-        <li class="nav-item"><a class="nav-link" href="{{ route('admin.categorias.index') }}">Categorias</a></li>
-        <li class="nav-item"><a class="nav-link" href="{{ route('colaboradores.index') }}">Colaboradores</a></li>
-        <li class="nav-item"><a class="nav-link" href="{{ route('produtos.index') }}">Produtos</a></li>
-        <li class="nav-item"><a class="nav-link" href="{{ route('admin.checkpoints.index') }}">CheckPoints</a></li>
-        <li class="nav-item"><a class="nav-link" href="{{ route('users.index') }}">Usuários</a></li>
+        <li class="nav-item"><a class="nav-link {{ request()->routeIs('admin.categorias.*') ? 'active fw-bold' : '' }}" href="{{ route('admin.categorias.index') }}">Categorias</a></li>
+        <li class="nav-item"><a class="nav-link {{ request()->routeIs('colaboradores.*') ? 'active fw-bold' : '' }}" href="{{ route('colaboradores.index') }}">Colaboradores</a></li>
+        <li class="nav-item"><a class="nav-link {{ request()->routeIs('produtos.*') ? 'active fw-bold' : '' }}" href="{{ route('produtos.index') }}">Produtos</a></li>
+        <li class="nav-item"><a class="nav-link {{ request()->routeIs('admin.checkpoints.*') ? 'active fw-bold' : '' }}" href="{{ route('admin.checkpoints.index') }}">CheckPoints</a></li>
+        <li class="nav-item"><a class="nav-link {{ request()->routeIs('users.*') ? 'active fw-bold' : '' }}" href="{{ route('users.index') }}">Usuários</a></li>
         @endauth
       </ul>
       @auth

@@ -1,3 +1,5 @@
+<?php
+
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
@@ -20,7 +22,8 @@ class CheckPointController extends Controller
 
     public function pdf(CheckPoint $checkpoint)
     {
-        // Placeholder for PDF generation
-        return "Simulação de Download de PDF para o CheckPoint #{$checkpoint->id}";
+        $checkpoint->load(['colaborador', 'produto.categoria', 'respostas.pergunta', 'respostas.opcaoSelecionada']);
+        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('admin.checkpoints.pdf', compact('checkpoint'));
+        return $pdf->download("checkpoint-{$checkpoint->id}.pdf");
     }
 }

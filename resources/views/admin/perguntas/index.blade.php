@@ -2,8 +2,8 @@
 
 @section('content')
 <div class="d-flex justify-content-between align-items-center mb-3">
-    <h1>Perguntas do Produto: {{ $produto->codigo }}</h1>
-    <a href="{{ route('admin.perguntas.create', $produto) }}" class="btn btn-primary">Nova Pergunta</a>
+    <h1>Perguntas da Categoria: {{ $categoria->nome }}</h1>
+    <a href="{{ route('admin.perguntas.create', $categoria) }}" class="btn btn-primary">Nova Pergunta</a>
 </div>
 
 <div class="card shadow-sm">
@@ -32,9 +32,15 @@
                         @endif
                     </td>
                     <td class="text-end">
+                        <a href="{{ route('admin.perguntas.edit', $pergunta) }}" class="btn btn-sm btn-outline-primary">Editar</a>
                         <form action="{{ route('admin.perguntas.destroy', $pergunta) }}" method="POST" class="d-inline">
                             @csrf @method('DELETE')
-                            <button class="btn btn-sm btn-outline-danger" onclick="return confirm('Excluir pergunta?')">Excluir</button>
+                            <button class="btn btn-sm btn-outline-danger" 
+                                    onclick="return confirm('Excluir pergunta?')"
+                                    @disabled($pergunta->respostas_count > 0)
+                                    title="{{ $pergunta->respostas_count > 0 ? 'Não é possível excluir perguntas que já possuem respostas' : '' }}">
+                                Excluir
+                            </button>
                         </form>
                     </td>
                 </tr>
@@ -44,6 +50,6 @@
     </div>
 </div>
 <div class="mt-3">
-    <a href="{{ route('produtos.index') }}" class="btn btn-secondary">Voltar para Produtos</a>
+    <a href="{{ route('admin.categorias.index') }}" class="btn btn-secondary">Voltar para Categorias</a>
 </div>
 @endsection

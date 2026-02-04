@@ -17,7 +17,6 @@ class Produto extends Model
         'posto',
         'linha',
         'setor',
-        'torque_padrao',
         'categoria_id',
     ];
 
@@ -28,7 +27,7 @@ class Produto extends Model
 
     public function perguntas()
     {
-        return $this->hasMany(Pergunta::class);
+        return $this->hasManyThrough(Pergunta::class, CategoriaProduto::class, 'id', 'categoria_id', 'categoria_id', 'id');
     }
 
     public function checkpoints()

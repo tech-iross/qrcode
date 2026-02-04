@@ -24,6 +24,7 @@
                     <td>{{ $categoria->nome }}</td>
                     <td><span class="badge bg-secondary">{{ $categoria->produtos_count }}</span></td>
                     <td class="text-end">
+                        <a href="{{ route('admin.perguntas.index', $categoria) }}" class="btn btn-sm btn-outline-info">Perguntas</a>
                         <a href="{{ route('admin.categorias.edit', $categoria) }}" class="btn btn-sm btn-outline-primary">Editar</a>
                         <form action="{{ route('admin.categorias.destroy', $categoria) }}" method="POST" class="d-inline">
                             @csrf @method('DELETE')

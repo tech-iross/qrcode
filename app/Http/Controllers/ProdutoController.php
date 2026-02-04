@@ -27,7 +27,6 @@ class ProdutoController extends Controller
             'posto' => 'required|string',
             'linha' => 'required|string',
             'setor' => 'required|string',
-            'torque_padrao' => 'nullable|numeric',
             'categoria_id' => 'nullable|exists:categorias_produtos,id',
         ]);
         Produto::create($data);
@@ -48,7 +47,6 @@ class ProdutoController extends Controller
             'posto' => 'required|string',
             'linha' => 'required|string',
             'setor' => 'required|string',
-            'torque_padrao' => 'nullable|numeric',
             'categoria_id' => 'nullable|exists:categorias_produtos,id',
         ]);
         $produto->update($data);

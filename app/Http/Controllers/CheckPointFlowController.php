@@ -14,17 +14,18 @@ class CheckPointFlowController extends Controller
 {
     public function index()
     {
-        $checkpoint = $this->currentCheckPoint();
+        $colaborador_id = Session::get('current_colaborador_id');
+        $produto_id = Session::get('current_produto_id');
+
         return view('flow.index', [
-            'checkpoint' => $checkpoint,
-            'etapa1Completa' => $checkpoint && $checkpoint->started_at,
-            'etapa2Completa' => $checkpoint && $checkpoint->produto_id,
+            'etapa1Completa' => (bool)$colaborador_id,
+            'etapa2Completa' => (bool)$produto_id,
         ]);
     }
 
     public function reset()
     {
-        Session::forget('current_checkpoint_id');
+        Session::forget(['current_colaborador_id', 'current_produto_id', 'start_time']);
         return redirect()->route('flow.index');
     }
 
@@ -42,16 +43,6 @@ class CheckPointFlowController extends Controller
         if (!$colaborador) {
             return back()->withErrors(['codigo_colaborador' => 'Colaborador não encontrado pela matrícula.']);
         }
-        
-        $checkpoint = CheckPoint::create([
-            'colaborador_id' => $colaborador->id,
-            'produto_id' => 1, // Placeholder temporarily for foreign key if not nullable during creation logic
-            'started_at' => now(),
-        ]);
-        // Update: Let's make produto_id nullable in migration if possible or handle it differently.
-        // Actually, looking at my migration, I made it constrained('produtos').
-        // I should probably wait until I have the product to create the CheckPoint, 
-        // OR make it nullable. Let's fix migration to be more flexible.
         
         Session::put('current_colaborador_id', $colaborador->id);
         Session::put('start_time', now());
@@ -84,7 +75,7 @@ class CheckPointFlowController extends Controller
         $produto_id = Session::get('current_produto_id');
         if (!$produto_id) return redirect()->route('flow.index');
         
-        $produto = Produto::with('perguntas.opcoes')->find($produto_id);
+        $produto = Produto::with('categoria.perguntas.opcoes')->find($produto_id);
         
         return view('flow.checkpoint', compact('produto'));
     }

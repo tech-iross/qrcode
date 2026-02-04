@@ -28,9 +28,6 @@
     <label class="form-label">Setor</label>
     <input type="text" name="setor" value="{{ old('setor', $produto->setor ?? '') }}" class="form-control" required>
 </div>
-<div class="mb-3">
-    <label class="form-label">Torque Padrão</label>
-    <input type="number" step="0.01" name="torque_padrao" value="{{ old('torque_padrao', $produto->torque_padrao ?? '') }}" class="form-control">
-</div>
+
 <button class="btn btn-success">Salvar</button>
 <a href="{{ route('produtos.index') }}" class="btn btn-secondary">Cancelar</a>

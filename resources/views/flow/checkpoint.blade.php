@@ -11,11 +11,11 @@
                 <form action="{{ route('flow.checkpoint.store') }}" method="POST">
                     @csrf
                     
-                    @if($produto->perguntas->isEmpty())
-                        <div class="alert alert-warning">Este produto não possui perguntas cadastradas. Pode concluir o checkpoint diretamente.</div>
+                    @if($produto->categoria->perguntas->isEmpty())
+                        <div class="alert alert-warning">Esta categoria de produto não possui perguntas cadastradas. Pode concluir o checkpoint diretamente.</div>
                     @endif
 
-                    @foreach($produto->perguntas as $pergunta)
+                    @foreach($produto->categoria->perguntas as $pergunta)
                     <div class="mb-4 p-3 border rounded bg-light">
                         <label class="form-label fw-bold">{{ $loop->iteration }}. {{ $pergunta->texto }}</label>
                         
