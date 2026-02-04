@@ -24,6 +24,7 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 WORKDIR /var/www/html
 
 COPY . .
+COPY .env.dev .env
 
 # Ajuste para apontar o Apache para a pasta /public do Laravel
 RUN sed -i 's|/var/www/html|/var/www/html/public|g' /etc/apache2/sites-available/000-default.conf
