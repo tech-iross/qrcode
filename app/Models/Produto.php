@@ -17,11 +17,21 @@ class Produto extends Model
         'posto',
         'linha',
         'setor',
-        'torque_padrao',
+        'categoria_id',
     ];
 
-    public function setups()
+    public function categoria()
     {
-        return $this->hasMany(Setup::class);
+        return $this->belongsTo(CategoriaProduto::class, 'categoria_id');
+    }
+
+    public function perguntas()
+    {
+        return $this->hasManyThrough(Pergunta::class, CategoriaProduto::class, 'id', 'categoria_id', 'categoria_id', 'id');
+    }
+
+    public function checkpoints()
+    {
+        return $this->hasMany(CheckPoint::class);
     }
 }

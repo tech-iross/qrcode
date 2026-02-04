@@ -1,51 +1,51 @@
 @extends('layouts.app')
-@section('title','Fluxo de Leitura')
+@section('title','Fluxo CheckPoint')
 @section('content')
-<?php /** @var $setup \App\Models\Setup|null */ ?>
 <div class="row g-4">
-    <div class="col-md-6">
+    <div class="col-md-4">
         <div class="card card-stage {{ $etapa1Completa ? 'done' : 'pending' }}">
             <div class="card-body">
-                <h5 class="card-title">Etapa 1 - Dados do Colaborador</h5>
-                <p class="card-text">{{ $etapa1Completa ? 'Concluída' : 'Aguardando leitura do QR (matrícula).'}} </p>
+                <h5 class="card-title">1. Colaborador</h5>
+                <p class="card-text small">{{ $etapa1Completa ? 'OK' : 'Aguardando QR.'}} </p>
                 @if(!$etapa1Completa)
-                    <a href="{{ route('flow.scan.colaborador') }}" class="btn btn-primary">Ler QR Colaborador</a>
+                    <a href="{{ route('flow.scan.colaborador') }}" class="btn btn-primary btn-sm">Ler QR</a>
                 @else
-                    <a href="{{ route('flow.scan.colaborador') }}" class="btn btn-outline-secondary">Releer</a>
+                    <button class="btn btn-success btn-sm" disabled>Concluído</button>
+                    <a href="{{ route('flow.scan.colaborador') }}" class="btn btn-link btn-sm">Alterar</a>
                 @endif
             </div>
         </div>
     </div>
-    <div class="col-md-6">
+    <div class="col-md-4">
         <div class="card card-stage {{ $etapa2Completa ? 'done' : 'pending' }}">
             <div class="card-body">
-                <h5 class="card-title">Etapa 2 - Dados da Parafusadeira</h5>
-                <p class="card-text">{{ !$etapa1Completa ? 'Aguardando etapa 1.' : ($etapa2Completa ? 'Concluída' : 'Aguardando leitura do QR e torque.') }}</p>
+                <h5 class="card-title">2. Produto</h5>
+                <p class="card-text small">{{ !$etapa1Completa ? 'Bloqueado.' : ($etapa2Completa ? 'OK' : 'Aguardando QR.') }}</p>
                 @if($etapa1Completa && !$etapa2Completa)
-                    <a href="{{ route('flow.scan.produto') }}" class="btn btn-primary">Ler QR Parafusadeira</a>
+                    <a href="{{ route('flow.scan.produto') }}" class="btn btn-primary btn-sm">Ler QR</a>
                 @elseif($etapa2Completa)
-                    <a href="{{ route('flow.scan.produto') }}" class="btn btn-outline-secondary">Releer</a>
+                    <button class="btn btn-success btn-sm" disabled>Concluído</button>
+                    <a href="{{ route('flow.scan.produto') }}" class="btn btn-link btn-sm">Alterar</a>
+                @endif
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card card-stage pending">
+            <div class="card-body">
+                <h5 class="card-title">3. CheckPoint</h5>
+                <p class="card-text small">Questionário final do produto.</p>
+                @if($etapa2Completa)
+                    <a href="{{ route('flow.checkpoint') }}" class="btn btn-primary btn-sm">Realizar CheckPoint</a>
+                @else
+                    <button class="btn btn-secondary btn-sm" disabled>Aguardando etapa 2</button>
                 @endif
             </div>
         </div>
     </div>
 </div>
-<hr>
-<div class="d-flex gap-2">
-    <form method="POST" action="{{ route('flow.reset') }}">@csrf<button class="btn btn-warning" {{ !$setup ? 'disabled' : '' }}>Reiniciar Fluxo</button></form>
-    <form method="POST" action="{{ route('flow.concluir') }}">@csrf
-        <button class="btn btn-success" {{ ($etapa1Completa && $etapa2Completa) ? '' : 'disabled' }}>Concluir Setup</button>
-    </form>
+
+<div class="mt-4">
+    <form method="POST" action="{{ route('flow.reset') }}">@csrf<button class="btn btn-outline-warning btn-sm">Reiniciar Todo o Fluxo</button></form>
 </div>
-@if($setup)
-    <div class="mt-4">
-        <h6>Setup Em Andamento</h6>
-        <ul class="list-group">
-            <li class="list-group-item">ID: {{ $setup->id }}</li>
-            <li class="list-group-item">Colaborador: {{ $setup->colaborador?->nome ?? '---' }}</li>
-            <li class="list-group-item">Produto: {{ $setup->produto?->codigo ?? '---' }}</li>
-            <li class="list-group-item">Torque Informado: {{ $setup->torque_informado ?? '---' }}</li>
-        </ul>
-    </div>
-@endif
 @endsection
